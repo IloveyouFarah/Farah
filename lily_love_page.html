@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>I Love You</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@300;400;600&family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Cormorant Garamond', serif;
+            background: radial-gradient(ellipse at bottom, #1a2b4a 0%, #0d1b2a 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .flower-container {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        .flower {
+            position: absolute;
+            bottom: -100%;
+            animation: sprout 3s cubic-bezier(0.23, 1, 0.32, 1) forwards;
+            transform-origin: bottom center;
+            filter: brightness(0.9);
+        }
+
+        @keyframes sprout {
+            0% {
+                bottom: -100%;
+                opacity: 0;
+            }
+            60% {
+                opacity: 0.7;
+            }
+            100% {
+                bottom: 0;
+                opacity: 0.85;
+            }
+        }
+
+        .stem {
+            width: 3px;
+            background: linear-gradient(to top, #2a4a2a 0%, #3d6b3d 50%, #5a8a5a 100%);
+            border-radius: 2px;
+            position: relative;
+            margin: 0 auto;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .bloom {
+            position: absolute;
+            top: -35px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 2.5rem;
+            animation: bloom 2s ease-out forwards;
+            animation-delay: 2.5s;
+            opacity: 0;
+            filter: drop-shadow(0 2px 8px rgba(0,0,0,0.3));
+        }
+
+        @keyframes bloom {
+            0% {
+                opacity: 0;
+                transform: translateX(-50%) scale(0.2) rotate(-30deg);
+            }
+            60% {
+                transform: translateX(-50%) scale(1.1) rotate(5deg);
+            }
+            100% {
+                opacity: 1;
+                transform: translateX(-50%) scale(1) rotate(0deg);
+            }
+        }
+
+        .leaf {
+            position: absolute;
+            width: 16px;
+            height: 24px;
+            background: linear-gradient(135deg, #4a7a4a 0%, #5a8a5a 100%);
+            border-radius: 0 60% 60% 0;
+            transform-origin: left center;
+            box-shadow: inset 1px 1px 2px rgba(0,0,0,0.2);
+        }
+
+        .leaf.left {
+            left: -12px;
+            transform: rotate(-40deg);
+        }
+
+        .leaf.right {
+            right: -12px;
+            transform: rotate(40deg) scaleX(-1);
+        }
+
+        .container {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            padding: 80px 40px;
+            max-width: 850px;
+            margin: 0 auto;
+            animation: fadeInContent 2s ease-out;
+        }
+
+        @keyframes fadeInContent {
+            0% {
+                opacity: 0;
+                transform: translateY(-30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h1 {
+            font-size: 5.5rem;
+            color: #ffffff;
+            margin-bottom: 15px;
+            font-weight: 300;
+            letter-spacing: 12px;
+            text-transform: uppercase;
+            opacity: 0;
+            animation: titleFade 2s ease-out forwards;
+            animation-delay: 0.5s;
+            text-shadow: 0 4px 20px rgba(255, 255, 255, 0.15);
+        }
+
+        @keyframes titleFade {
+            0% {
+                opacity: 0;
+                letter-spacing: 20px;
+            }
+            100% {
+                opacity: 1;
+                letter-spacing: 12px;
+            }
+        }
+
+        .subtitle {
+            font-size: 1.2rem;
+            color: #b8c5d6;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 200;
+            letter-spacing: 4px;
+            margin-bottom: 50px;
+            opacity: 0;
+            animation: subtitleFade 2s ease-out forwards;
+            animation-delay: 1s;
+        }
+
+        @keyframes subtitleFade {
+            0% {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .day-counter {
+            font-size: 1.3rem;
+            color: #e8d4c0;
+            margin-bottom: 60px;
+            font-weight: 300;
+            letter-spacing: 3px;
+            font-family: 'Montserrat', sans-serif;
+            opacity: 0;
+            animation: counterFade 2s ease-out forwards;
+            animation-delay: 1.5s;
+        }
+
+        @keyframes counterFade {
+            0% {
+                opacity: 0;
+            }
+            100% {
+                opacity: 0.9;
+            }
+        }
+
+        .message-box {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(30px);
+            border-radius: 20px;
+            padding: 60px 70px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1),
+                inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+            margin-top: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            opacity: 0;
+            animation: boxFade 2s ease-out forwards;
+            animation-delay: 2s;
+            position: relative;
+        }
+
+        @keyframes boxFade {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .message-box::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: linear-gradient(90deg, 
+                transparent, 
+                rgba(255, 255, 255, 0.3), 
+                transparent
+            );
+        }
+
+        .message {
+            font-size: 1.9rem;
+            color: #f5f5f5;
+            line-height: 2;
+            font-weight: 300;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            position: relative;
+            z-index: 1;
+        }
+
+        .message::before {
+            content: '"';
+            position: absolute;
+            left: -30px;
+            top: -10px;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.15);
+            font-family: Georgia, serif;
+        }
+
+        .message::after {
+            content: '"';
+            position: absolute;
+            right: -30px;
+            bottom: -30px;
+            font-size: 4rem;
+            color: rgba(255, 255, 255, 0.15);
+            font-family: Georgia, serif;
+        }
+
+        .ornament {
+            width: 100px;
+            height: 1px;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            margin: 40px auto 0;
+            position: relative;
+        }
+
+        .ornament::before {
+            content: '✦';
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.8rem;
+            background: #0d1b2a;
+            padding: 0 10px;
+        }
+
+        .sparkles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .sparkle {
+            position: absolute;
+            width: 2px;
+            height: 2px;
+            background: white;
+            border-radius: 50%;
+            animation: twinkle 3s infinite ease-in-out;
+            box-shadow: 0 0 4px rgba(255, 255, 255, 0.8);
+        }
+
+        @keyframes twinkle {
+            0%, 100% { opacity: 0; }
+            50% { opacity: 0.8; }
+        }
+
+        @media (max-width: 768px) {
+            h1 { 
+                font-size: 3rem; 
+                letter-spacing: 6px;
+            }
+            .message { 
+                font-size: 1.4rem;
+                line-height: 1.8;
+            }
+            .message-box { padding: 40px 30px; }
+            .message::before,
+            .message::after {
+                font-size: 2.5rem;
+            }
+            .message::before { left: -15px; }
+            .message::after { right: -15px; }
+            .bloom { font-size: 2rem; top: -25px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="flower-container" id="flowerContainer"></div>
+    <div class="sparkles" id="sparkles"></div>
+    
+    <div class="container">
+        <h1>I Love You</h1>
+        <div class="subtitle">Forever & Always</div>
+        <div class="day-counter">Day <span id="dayNumber">1</span> of 31</div>
+        
+        <div class="message-box">
+            <div class="message" id="dailyMessage">Loading your special message...</div>
+            <div class="ornament"></div>
+        </div>
+    </div>
+
+    <script>
+        const messages = [
+            "Your smile lights up my entire world and makes every day brighter.",
+            "The way you laugh is the most beautiful sound I've ever heard.",
+            "Your kindness and compassion inspire me to be a better person.",
+            "I love how you always know exactly what to say to make me feel better.",
+            "Your intelligence and wit never cease to amaze me.",
+            "The way you care for others shows what a beautiful heart you have.",
+            "I love your sense of humor and how you can always make me laugh.",
+            "Your strength and resilience in facing challenges is truly admirable.",
+            "The way you listen and truly hear what I'm saying means everything to me.",
+            "I love how passionate you are about the things you care about.",
+            "Your creativity and unique perspective make life so much more interesting.",
+            "The way you support my dreams makes me feel like I can do anything.",
+            "I love how comfortable and at home I feel when I'm with you.",
+            "Your thoughtfulness in the little things never goes unnoticed.",
+            "The way your eyes sparkle when you talk about things you love is magical.",
+            "I love how you make even ordinary moments feel special.",
+            "Your determination and work ethic inspire me every single day.",
+            "The way you accept me for exactly who I am means the world to me.",
+            "I love your adventurous spirit and willingness to try new things.",
+            "Your patience and understanding make every challenge easier to face.",
+            "The way you dance, even when no one's watching, brings me so much joy.",
+            "I love how you can turn any situation into something positive.",
+            "Your generosity and giving nature make you truly one of a kind.",
+            "The way you remember small details about things I've said shows how much you care.",
+            "I love how you challenge me to grow and become my best self.",
+            "Your loyalty and trustworthiness are gifts I treasure every day.",
+            "The way you make me feel safe and loved is irreplaceable.",
+            "I love your unique quirks that make you perfectly you.",
+            "Your optimism and positive energy are contagious and uplifting.",
+            "The way you've changed my life for the better is something I'm grateful for every day.",
+            "I love you for all these reasons and a million more that words can't capture."
+        ];
+
+        function createFlower() {
+            const flower = document.createElement('div');
+            flower.className = 'flower';
+            
+            const stemHeight = 100 + Math.random() * 180;
+            const stem = document.createElement('div');
+            stem.className = 'stem';
+            stem.style.height = stemHeight + 'px';
+            
+            const leftLeaf = document.createElement('div');
+            leftLeaf.className = 'leaf left';
+            leftLeaf.style.top = (stemHeight * 0.45) + 'px';
+            stem.appendChild(leftLeaf);
+            
+            const rightLeaf = document.createElement('div');
+            rightLeaf.className = 'leaf right';
+            rightLeaf.style.top = (stemHeight * 0.65) + 'px';
+            stem.appendChild(rightLeaf);
+            
+            const bloom = document.createElement('div');
+            bloom.className = 'bloom';
+            const flowers = ['🌸', '🌺', '🌷', '🏵️'];
+            bloom.textContent = flowers[Math.floor(Math.random() * flowers.length)];
+            stem.appendChild(bloom);
+            
+            flower.appendChild(stem);
+            flower.style.left = Math.random() * 95 + '%';
+            flower.style.animationDelay = Math.random() * 1.5 + 's';
+            
+            return flower;
+        }
+
+        const flowerContainer = document.getElementById('flowerContainer');
+        for (let i = 0; i < 20; i++) {
+            flowerContainer.appendChild(createFlower());
+        }
+
+        function createSparkle() {
+            const sparkle = document.createElement('div');
+            sparkle.className = 'sparkle';
+            sparkle.style.left = Math.random() * 100 + '%';
+            sparkle.style.top = Math.random() * 100 + '%';
+            sparkle.style.animationDelay = Math.random() * 3 + 's';
+            sparkle.style.animationDuration = (2 + Math.random() * 2) + 's';
+            return sparkle;
+        }
+
+        const sparklesContainer = document.getElementById('sparkles');
+        for (let i = 0; i < 40; i++) {
+            sparklesContainer.appendChild(createSparkle());
+        }
+
+        function getDayNumber() {
+            const startDate = localStorage.getItem('startDate');
+            const now = new Date();
+            
+            if (!startDate) {
+                localStorage.setItem('startDate', now.toISOString());
+                return 1;
+            }
+
+            const start = new Date(startDate);
+            const diffTime = Math.abs(now - start);
+            const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
+            
+            return Math.min(diffDays, 31);
+        }
+
+        const currentDay = getDayNumber();
+        document.getElementById('dayNumber').textContent = currentDay;
+        document.getElementById('dailyMessage').textContent = messages[currentDay - 1];
+    </script>
+</body>
+</html>
