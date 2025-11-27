@@ -181,13 +181,31 @@
         .day-counter {
             font-size: 1.3rem;
             color: #e8d4c0;
-            margin-bottom: 60px;
+            margin-bottom: 20px;
             font-weight: 300;
             letter-spacing: 3px;
             font-family: 'Montserrat', sans-serif;
             opacity: 0;
             animation: counterFade 2s ease-out forwards;
             animation-delay: 1.5s;
+        }
+
+        .timer {
+            font-size: 1rem;
+            color: #b8c5d6;
+            margin-bottom: 60px;
+            font-weight: 200;
+            letter-spacing: 2px;
+            font-family: 'Montserrat', sans-serif;
+            opacity: 0;
+            animation: counterFade 2s ease-out forwards;
+            animation-delay: 1.7s;
+        }
+
+        .timer-digits {
+            color: #e8d4c0;
+            font-weight: 300;
+            margin-left: 8px;
         }
 
         @keyframes counterFade {
@@ -344,6 +362,7 @@
         <h1>I Love You</h1>
         <div class="subtitle">Forever & Always</div>
         <div class="day-counter">Day <span id="dayNumber">1</span> of 31</div>
+        <div class="timer" id="timer">Next message in <span class="timer-digits">00:00:00</span></div>
         
         <div class="message-box">
             <div class="message" id="dailyMessage">Loading your special message...</div>
@@ -439,16 +458,19 @@
         }
 
         function getDayNumber() {
-            const startDate = localStorage.getItem('startDate');
+            const startDate = new Date('2025-12-21T00:00:00');
             const now = new Date();
             
-            if (!startDate) {
-                localStorage.setItem('startDate', now.toISOString());
+            // If we haven't reached December 21st yet, show Day 1
+            if (now < startDate) {
                 return 1;
             }
 
-            const start = new Date(startDate);
-            const diffTime = Math.abs(now - start);
+            // Calculate days since December 21st (midnight to midnight)
+            const nowMidnight = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+            const startMidnight = new Date(startDate.getFullYear(), startDate.getMonth(), startDate.getDate());
+            
+            const diffTime = nowMidnight - startMidnight;
             const diffDays = Math.floor(diffTime / (1000 * 60 * 60 * 24)) + 1;
             
             return Math.min(diffDays, 31);
@@ -457,6 +479,63 @@
         const currentDay = getDayNumber();
         document.getElementById('dayNumber').textContent = currentDay;
         document.getElementById('dailyMessage').textContent = messages[currentDay - 1];
+
+        // Update timer every second
+        function updateTimer() {
+            const startDate = new Date('2025-12-21T00:00:00');
+            const now = new Date();
+            
+            // Calculate next midnight
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeLeft = tomorrow - now;
+            
+            const currentDayNum = getDayNumber();
+            
+            // Hide timer if we're on day 31 or haven't started yet
+            if (currentDayNum >= 31) {
+                document.getElementById('timer').style.display = 'none';
+                return;
+            }
+            
+            // Show countdown to December 21st if we haven't started
+            if (now < startDate) {
+                const timeToStart = startDate - now;
+                const days = Math.floor(timeToStart / (1000 * 60 * 60 * 24));
+                const hours = Math.floor((timeToStart % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                const minutes = Math.floor((timeToStart % (1000 * 60 * 60)) / (1000 * 60));
+                const seconds = Math.floor((timeToStart % (1000 * 60)) / 1000);
+                
+                if (days > 0) {
+                    document.querySelector('.timer').innerHTML = 
+                        `Countdown begins in <span class="timer-digits">${days}d ${hours}h ${minutes}m ${seconds}s</span>`;
+                } else {
+                    const formattedTime = 
+                        String(hours).padStart(2, '0') + ':' + 
+                        String(minutes).padStart(2, '0') + ':' + 
+                        String(seconds).padStart(2, '0');
+                    document.querySelector('.timer').innerHTML = 
+                        `Countdown begins in <span class="timer-digits">${formattedTime}</span>`;
+                }
+                return;
+            }
+            
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            const formattedTime = 
+                String(hours).padStart(2, '0') + ':' + 
+                String(minutes).padStart(2, '0') + ':' + 
+                String(seconds).padStart(2, '0');
+            
+            document.querySelector('.timer-digits').textContent = formattedTime;
+        }
+        
+        updateTimer();
+        setInterval(updateTimer, 1000);
     </script>
 </body>
 </html>
